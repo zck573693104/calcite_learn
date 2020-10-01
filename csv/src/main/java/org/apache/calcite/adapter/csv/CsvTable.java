@@ -19,6 +19,7 @@ package org.apache.calcite.adapter.csv;
 import org.apache.calcite.adapter.file.CsvEnumerator;
 import org.apache.calcite.adapter.file.CsvFieldType;
 import org.apache.calcite.adapter.java.JavaTypeFactory;
+import org.apache.calcite.csv.CsvParam;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rel.type.RelProtoDataType;
@@ -32,6 +33,7 @@ import java.util.List;
  * Base class for table that reads CSV files.
  */
 public abstract class CsvTable extends AbstractTable {
+  protected CsvParam csvParam;
   protected final Source source;
   protected final RelProtoDataType protoRowType;
   private RelDataType rowType;
@@ -43,13 +45,20 @@ public abstract class CsvTable extends AbstractTable {
     this.protoRowType = protoRowType;
   }
 
+  /** Creates a CsvTable. */
+  CsvTable(CsvParam csvParam,Source source, RelProtoDataType protoRowType) {
+    this.csvParam = csvParam;
+    this.source = source;
+    this.protoRowType = protoRowType;
+  }
+
   public RelDataType getRowType(RelDataTypeFactory typeFactory) {
     if (protoRowType != null) {
       return protoRowType.apply(typeFactory);
     }
     if (rowType == null) {
       rowType = CsvEnumerator.deduceRowType((JavaTypeFactory) typeFactory, source,
-          null, isStream());
+          null, isStream(),csvParam);
     }
     return rowType;
   }
@@ -59,7 +68,7 @@ public abstract class CsvTable extends AbstractTable {
     if (fieldTypes == null) {
       fieldTypes = new ArrayList<>();
       CsvEnumerator.deduceRowType((JavaTypeFactory) typeFactory, source,
-          fieldTypes, isStream());
+          fieldTypes, isStream(),csvParam);
     }
     return fieldTypes;
   }

@@ -25,7 +25,8 @@
       "type": "custom",
       "factory": "org.apache.calcite.adapter.csv.CsvSchemaFactory",
       "operand": {
-        "directory": "sales"
+        "directory": "/load/data/test.csv",
+        "schema": "/load/data/schema.json"
       }
     }
   ]

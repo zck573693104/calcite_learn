@@ -19,6 +19,7 @@ package org.apache.calcite.adapter.csv;
 import org.apache.calcite.DataContext;
 import org.apache.calcite.adapter.file.CsvEnumerator;
 import org.apache.calcite.adapter.file.CsvFieldType;
+import org.apache.calcite.csv.CsvParam;
 import org.apache.calcite.linq4j.AbstractEnumerable;
 import org.apache.calcite.linq4j.Enumerable;
 import org.apache.calcite.linq4j.Enumerator;
@@ -41,6 +42,10 @@ public class CsvScannableTable extends CsvTable
   /** Creates a CsvScannableTable. */
   CsvScannableTable(Source source, RelProtoDataType protoRowType) {
     super(source, protoRowType);
+  }
+
+  CsvScannableTable(CsvParam csvParam, Source source, RelProtoDataType protoRowType) {
+    super(csvParam,source, protoRowType);
   }
 
   public String toString() {

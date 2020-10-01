@@ -16,6 +16,7 @@
  */
 package org.apache.calcite.adapter.csv;
 
+import org.apache.calcite.csv.CsvParam;
 import org.apache.calcite.model.ModelHandler;
 import org.apache.calcite.schema.Schema;
 import org.apache.calcite.schema.SchemaFactory;
@@ -41,13 +42,12 @@ public class CsvSchemaFactory implements SchemaFactory {
 
   public Schema create(SchemaPlus parentSchema, String name,
       Map<String, Object> operand) {
+    CsvParam csvParam = new CsvParam(new File((String) operand.get("directory")),new File((String) operand.get("schema")));
     final String directory = (String) operand.get("directory");
     final File base =
         (File) operand.get(ModelHandler.ExtraOperand.BASE_DIRECTORY.camelName);
     File directoryFile = new File(directory);
-    if (base != null && !directoryFile.isAbsolute()) {
-      directoryFile = new File(base, directory);
-    }
+
     String flavorName = (String) operand.get("flavor");
     CsvTable.Flavor flavor;
     if (flavorName == null) {
@@ -55,6 +55,6 @@ public class CsvSchemaFactory implements SchemaFactory {
     } else {
       flavor = CsvTable.Flavor.valueOf(flavorName.toUpperCase(Locale.ROOT));
     }
-    return new CsvSchema(directoryFile, flavor);
+    return new CsvSchema(csvParam, flavor);
   }
 }
