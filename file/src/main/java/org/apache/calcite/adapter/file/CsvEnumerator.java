@@ -82,6 +82,7 @@ public class CsvEnumerator<E> implements Enumerator<E> {
       } else {
         this.reader = openCsv(source);
       }
+
       // TODO: 2020/10/1 列的信息放在了json文件进行解释
       //this.reader.readNext(); // skip header row
     } catch (IOException e) {
@@ -341,6 +342,7 @@ public class CsvEnumerator<E> implements Enumerator<E> {
       }
     }
 
+    // TODO: 2020/10/1 支持 列丢失 不报错  返回null
     public Object[] convertNormalRow(String[] strings) {
       int size = strings.length;
       final Object[] objects = new Object[fields.size()];
