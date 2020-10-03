@@ -62,9 +62,10 @@ public class Client {
         private int threshold;
     }
 
-    public static void dealModel(OriginData originData,SqlData sqlData) throws SQLException, IOException {
-
-        CsvUtil.mergeFile(originData.getSchemaPath(), originData.getDataPath(), originData.getSinkPath());
+    public static void dealModel(List<OriginData> originDataList,SqlData sqlData) throws SQLException, IOException {
+        originDataList.forEach(originData -> {
+            CsvUtil.mergeFile(originData.getSchemaPath(), originData.getDataPath(), originData.getSinkPath());
+        });
         dealCsv(sqlData);
     }
     /**
@@ -73,11 +74,15 @@ public class Client {
      * operand 动态参数，ScheamFactory的create方法会接收到这里的数据
      */
     public static void main(String[] args) throws Exception {
+        List<OriginData> originDataList = new ArrayList<>();
+        OriginData originData = new OriginData("/load/data/schema.json","/load/data/test1/test_1.csv","/load/data/sink/test_1.csv");
 
-        OriginData originData = new OriginData("/load/data/schema.json","/load/data/","/load/data/sink/test.csv");
-        String sql = "select name,age,cast(replace(test,'m','')  as int) as test from test ";
+        OriginData originData1 = new OriginData("/load/data/schema.json","/load/data/test2/test_2.csv","/load/data/sink/test_2.csv");
+        originDataList.add(originData);
+        originDataList.add(originData1);
+        String sql = "select test_1.name,NULLIF(test_2.age,1)  from test_1 as test_1 left join test_2 as test_2 on test_1.name=test_2.name ";
         SqlData sqlData = new SqlData("/load/data/model.json",sql,"/load/data/test.json",100);
-        dealModel(originData,sqlData);
+        dealModel(originDataList,sqlData);
 
 
     }
