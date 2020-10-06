@@ -27,6 +27,7 @@ import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Source;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -262,27 +263,27 @@ public class CsvEnumerator<E> implements Enumerator<E> {
         return Short.parseShort(string);
       case INT:
         if (StringUtils.isBlank(string)) {
-          return null;
+          return -1;
         }
         return Integer.parseInt(string);
       case LONG:
         if (StringUtils.isBlank(string)) {
-          return null;
+          return System.currentTimeMillis();
         }
         return Long.parseLong(string);
       case FLOAT:
         if (StringUtils.isBlank(string)) {
-          return null;
+          return -1.0F;
         }
         return Float.parseFloat(string);
       case DOUBLE:
         if (StringUtils.isBlank(string)) {
-          return null;
+          return -1.0D;
         }
         return Double.parseDouble(string);
       case DATE:
         if (StringUtils.isBlank(string)) {
-          return null;
+          return (int) (System.currentTimeMillis() / DateTimeUtils.MILLIS_PER_DAY);
         }
         try {
           Date date = TIME_FORMAT_DATE.parse(string);
@@ -292,7 +293,7 @@ public class CsvEnumerator<E> implements Enumerator<E> {
         }
       case TIME:
         if (StringUtils.isBlank(string)) {
-          return null;
+          return System.currentTimeMillis()/1000;
         }
         try {
           Date date = TIME_FORMAT_TIME.parse(string);
@@ -302,7 +303,7 @@ public class CsvEnumerator<E> implements Enumerator<E> {
         }
       case TIMESTAMP:
         if (StringUtils.isBlank(string)) {
-          return null;
+          return System.currentTimeMillis();
         }
         try {
           Date date = TIME_FORMAT_TIMESTAMP.parse(string);

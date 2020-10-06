@@ -1,7 +1,6 @@
 package org.apache.calcite;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
+
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import lombok.Data;
@@ -18,6 +17,7 @@ import java.util.Properties;
 
 
 public class Client {
+
 
     @Data
     private static class OriginData{
@@ -80,7 +80,10 @@ public class Client {
         OriginData originData1 = new OriginData("/load/data/schema.json","/load/data/test2/test_2.csv","/load/data/sink/test_2.csv");
         originDataList.add(originData);
         originDataList.add(originData1);
-        String sql = "select test_1.name,NULLIF(test_2.age,1)  from test_1 as test_1 left join test_2 as test_2 on test_1.name=test_2.name ";
+        String sql = "select " +
+                " case test_1.name when 'false' then 0 " +
+                "when 'true' then 1 else test_1.name  end as name "+
+                ",ifnull(test_2.age,1)  from test_1 as test_1 left join test_2 as test_2 on test_1.name=test_2.name ";
         SqlData sqlData = new SqlData("/load/data/model.json",sql,"/load/data/test.json",100);
         dealModel(originDataList,sqlData);
 
