@@ -28,7 +28,8 @@ public class HrSchema {
         String sql = "select " +
                 " case test_1.name when 'false' then 0 " +
                 "when 'true' then 1 else test_1.name  end as name "+
-                ",IFNULL(test_2.age,UUID()) ,DATE_FORMAT(NOW(),'yyyy-MM-dd HH:mm:ss') from test_1 as test_1 left join test_2 as test_2 on test_1.name=test_2.name ";
+                ",IFNULL(test_2.age,UUID()) ,DATE_FORMAT(NOW(),'yyyy-MM-dd HH:mm:ss') from test_1 as test_1 left join test_2 as test_2 on test_1.name=test_2.name " +
+                " where test_2.age > 20 ";
         ResultSet resultSet = statement.executeQuery(sql);
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnSize = metaData.getColumnCount();

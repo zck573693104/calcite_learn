@@ -1,6 +1,9 @@
 package org.apache.calcite.csv;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
+import org.apache.calcite.Client;
 import org.apache.calcite.Columns;
 import org.apache.calcite.util.FileUtil;
 import org.apache.commons.io.FileUtils;
@@ -10,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CsvUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(Client.class);
 
     public static void mergeFile(String schemaPath, String dataPath, String sinkPath) {
         try {
@@ -35,8 +40,7 @@ public class CsvUtil {
             }
 
         } catch (IOException e) {
-            // File对象的创建过程中的异常捕获
-            e.printStackTrace();
+           logger.error(e.getMessage());
         }
     }
 
