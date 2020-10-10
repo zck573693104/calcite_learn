@@ -135,7 +135,7 @@ public class Client {
 
                 Map<String, Object> map = Maps.newLinkedHashMap();
                 for (int i = 1; i < columnSize + 1; i++) {
-                    map.put(metaData.getColumnName(i), resultSet.getObject(i));
+                    map.put(metaData.getColumnLabel(i), resultSet.getObject(i));
                 }
                 if (resultList.size() < threshold) {
                     resultList.add(JSONObject.toJSONString(map));
